@@ -1,0 +1,20 @@
+{
+  "name": "sensible-sdk",
+  "version": "0.0.1",
+  "description": "Sensible SDK",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "/dist"
+  ],
+  "scripts": {
+    "build": "tsc"
+  },
+  "author": "Sensible",
+  "devDependencies": {
+    "@types/node": "^20.6.3"
+  },
+  "dependencies": {
+    "got": "^11.8.5"
+  }
+}
