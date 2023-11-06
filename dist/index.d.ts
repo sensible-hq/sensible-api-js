@@ -6,6 +6,9 @@ export declare class SensibleSDK {
     extract(params: ExtractParams): Promise<ExtractionRequest>;
     classify(params: ClassificationParams): Promise<ClassificationRequest>;
     waitFor(request: ClassificationRequest | ExtractionRequest): Promise<ExtractionResult | ClassificationResult>;
+    generateExcel(requests: ExtractionRequest | ExtractionRequest[]): Promise<{
+        url: string;
+    }>;
 }
 type FileDefinition = {
     file: Buffer;

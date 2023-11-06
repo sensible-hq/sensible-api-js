@@ -205,6 +205,36 @@ var SensibleSDK = /** @class */ (function () {
             });
         });
     };
+    // requested extractions must be completed
+    SensibleSDK.prototype.generateExcel = function (requests) {
+        return __awaiter(this, void 0, void 0, function () {
+            var extractions, url, e_5;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        extractions = Array.isArray(requests) ? requests : [requests];
+                        url = baseUrl +
+                            "/generate_excel/" +
+                            extractions.map(function (extraction) { return extraction.id; }).join(",");
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, got_1.default
+                                .get(url, {
+                                headers: { authorization: "Bearer ".concat(this.apiKey) },
+                            })
+                                .json()];
+                    case 2: return [2 /*return*/, _a.sent()];
+                    case 3:
+                        e_5 = _a.sent();
+                        throwError(e_5);
+                        // HACK: keep TS happy
+                        throw null;
+                    case 4: return [2 /*return*/];
+                }
+            });
+        });
+    };
     return SensibleSDK;
 }());
 exports.SensibleSDK = SensibleSDK;
