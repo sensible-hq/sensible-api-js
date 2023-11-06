@@ -1,5 +1,4 @@
 import got, { HTTPError } from "got";
-import { type } from "node:os";
 import * as querystring from "node:querystring";
 import { promisify } from "util";
 import { ClassificationResult, ExtractionResult, Webhook } from "./types";
@@ -109,6 +108,7 @@ export class SensibleSDK {
       downloadLink: response.download_link,
     };
   }
+
   async waitFor(request: ClassificationRequest | ExtractionRequest) {
     // TODO: timeout?
     while (true) {
@@ -138,6 +138,30 @@ export class SensibleSDK {
         }
       }
       await sleep(5_000); // TODO: parameterize polling interval
+    }
+  }
+
+  // requested extractions must be completed
+  async generateExcel(
+    requests: ExtractionRequest | ExtractionRequest[]
+  ): Promise<{ url: string }> {
+    const extractions = Array.isArray(requests) ? requests : [requests];
+
+    const url =
+      baseUrl +
+      "/generate_excel/" +
+      extractions.map((extraction) => extraction.id).join(",");
+
+    try {
+      return await got
+        .get(url, {
+          headers: { authorization: `Bearer ${this.apiKey}` },
+        })
+        .json();
+    } catch (e) {
+      throwError(e);
+      // HACK: keep TS happy
+      throw null;
     }
   }
 }
