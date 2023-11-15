@@ -1,5 +1,6 @@
 import got, { HTTPError } from "got";
 import * as querystring from "node:querystring";
+import { promises as fs } from "fs";
 import { promisify } from "util";
 import type { ClassificationResult, ExtractionResult, Webhook } from "./types";
 
@@ -65,10 +66,13 @@ export class SensibleSDK {
 
       const { id, upload_url } = response;
 
+      const file =
+        "file" in params ? params.file : await fs.readFile(params.path);
+
       try {
         const putResponse = await got.put(upload_url, {
           method: "PUT",
-          body: params.file,
+          body: file,
         });
       } catch (e: any) {
         throw `Error ${e.response.statusCode} uploading file to S3: ${e.response.body}`;
@@ -83,11 +87,14 @@ export class SensibleSDK {
 
     const url = `${baseUrl}/classify/async`;
 
+    const file =
+      "file" in params ? params.file : await fs.readFile(params.path);
+
     let response;
     try {
       response = await got
         .post(url, {
-          body: params.file,
+          body: file,
           headers: {
             authorization: `Bearer ${this.apiKey}`,
             "content-type": "application/pdf", // HACK
@@ -166,7 +173,7 @@ export class SensibleSDK {
   }
 }
 
-type FileDefinition = { file: Buffer } | { url: string };
+type FileDefinition = { file: Buffer } | { url: string } | { path: string };
 type DocumentType =
   | { documentType: string; configurationName?: string }
   | { documentTypes: string[] };
@@ -185,12 +192,16 @@ function validateExtractParams(params: unknown) {
   if (
     !(
       ("file" in params && params.file instanceof Buffer) ||
-      ("url" in params && typeof params.url === "string")
+      ("url" in params && typeof params.url === "string") ||
+      ("path" in params && typeof params.path === "string")
     )
   )
-    throw "Invalid extraction parameters: must include file or url";
-  if ("file" in params && "url" in params)
-    throw "Invalid extraction parameters: ony one of file or url should be set";
+    throw "Invalid extraction parameters: must include file, url or path";
+  if (
+    ["file" in params, "url" in params, "path" in params].filter((x) => x)
+      .length !== 1
+  )
+    throw "Invalid extraction parameters: only one of file, url or path should be set";
   if (
     !(
       ("documentType" in params && typeof params.documentType === "string") ||
@@ -210,15 +221,15 @@ function validateExtractParams(params: unknown) {
     throw "Invalid extraction parameters: environment should be a string";
 }
 
-type ClassificationParams = { file: Buffer };
+type ClassificationParams = { file: Buffer } | { path: string };
 
 function validateClassificationParams(params: unknown) {
   if (
     !(
       params &&
       typeof params === "object" &&
-      "file" in params &&
-      params.file instanceof Buffer
+      (("file" in params && params.file instanceof Buffer) ||
+        ("path" in params && typeof params.path === "string"))
     )
   )
     throw "Invalid classification params";

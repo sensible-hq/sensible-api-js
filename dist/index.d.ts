@@ -14,6 +14,8 @@ type FileDefinition = {
     file: Buffer;
 } | {
     url: string;
+} | {
+    path: string;
 };
 type DocumentType = {
     documentType: string;
@@ -29,6 +31,8 @@ type Options = {
 type ExtractParams = FileDefinition & DocumentType & Options;
 type ClassificationParams = {
     file: Buffer;
+} | {
+    path: string;
 };
 type ExtractionRequest = {
     type: "extraction";

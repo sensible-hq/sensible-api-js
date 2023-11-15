@@ -50,6 +50,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.SensibleSDK = void 0;
 var got_1 = require("got");
 var querystring = require("node:querystring");
+var fs_1 = require("fs");
 var util_1 = require("util");
 var baseUrl = "https://api.sensible.so/v0";
 var SensibleSDK = /** @class */ (function () {
@@ -58,9 +59,9 @@ var SensibleSDK = /** @class */ (function () {
     }
     SensibleSDK.prototype.extract = function (params) {
         return __awaiter(this, void 0, void 0, function () {
-            var webhook, documentName, environment, url, body, headers, response, e_1, id, upload_url, putResponse, e_2;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            var webhook, documentName, environment, url, body, headers, response, e_1, id, upload_url, file, _a, putResponse, e_2;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
                         // This can be called from JS, so we cannot trust the type engine
                         validateExtractParams(params);
@@ -74,9 +75,9 @@ var SensibleSDK = /** @class */ (function () {
                             "?".concat(querystring.stringify(__assign(__assign({}, (environment ? { environment: environment } : {})), (documentName ? { documentName: documentName } : {}))));
                         body = __assign(__assign(__assign({}, ("url" in params ? { document_url: params.url } : {})), (webhook ? { webhook: webhook } : {})), ("documentTypes" in params ? { types: params.documentTypes } : {}));
                         headers = { authorization: "Bearer ".concat(this.apiKey) };
-                        _a.label = 1;
+                        _b.label = 1;
                     case 1:
-                        _a.trys.push([1, 3, , 4]);
+                        _b.trys.push([1, 3, , 4]);
                         return [4 /*yield*/, got_1.default
                                 .post(url, {
                                 json: body,
@@ -84,10 +85,10 @@ var SensibleSDK = /** @class */ (function () {
                             })
                                 .json()];
                     case 2:
-                        response = _a.sent();
+                        response = _b.sent();
                         return [3 /*break*/, 4];
                     case 3:
-                        e_1 = _a.sent();
+                        e_1 = _b.sent();
                         throwError(e_1);
                         return [3 /*break*/, 4];
                     case 4:
@@ -101,52 +102,70 @@ var SensibleSDK = /** @class */ (function () {
                             throw "Got invalid response from extract_from_url: ".concat(JSON.stringify(response));
                         }
                         id = response.id, upload_url = response.upload_url;
-                        _a.label = 6;
-                    case 6:
-                        _a.trys.push([6, 8, , 9]);
+                        if (!("file" in params)) return [3 /*break*/, 6];
+                        _a = params.file;
+                        return [3 /*break*/, 8];
+                    case 6: return [4 /*yield*/, fs_1.promises.readFile(params.path)];
+                    case 7:
+                        _a = _b.sent();
+                        _b.label = 8;
+                    case 8:
+                        file = _a;
+                        _b.label = 9;
+                    case 9:
+                        _b.trys.push([9, 11, , 12]);
                         return [4 /*yield*/, got_1.default.put(upload_url, {
                                 method: "PUT",
-                                body: params.file,
+                                body: file,
                             })];
-                    case 7:
-                        putResponse = _a.sent();
-                        return [3 /*break*/, 9];
-                    case 8:
-                        e_2 = _a.sent();
+                    case 10:
+                        putResponse = _b.sent();
+                        return [3 /*break*/, 12];
+                    case 11:
+                        e_2 = _b.sent();
                         throw "Error ".concat(e_2.response.statusCode, " uploading file to S3: ").concat(e_2.response.body);
-                    case 9: return [2 /*return*/, { type: "extraction", id: id }];
+                    case 12: return [2 /*return*/, { type: "extraction", id: id }];
                 }
             });
         });
     };
     SensibleSDK.prototype.classify = function (params) {
         return __awaiter(this, void 0, void 0, function () {
-            var url, response, e_3;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            var url, file, _a, response, e_3;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
                         validateClassificationParams(params);
                         url = "".concat(baseUrl, "/classify/async");
-                        _a.label = 1;
-                    case 1:
-                        _a.trys.push([1, 3, , 4]);
+                        if (!("file" in params)) return [3 /*break*/, 1];
+                        _a = params.file;
+                        return [3 /*break*/, 3];
+                    case 1: return [4 /*yield*/, fs_1.promises.readFile(params.path)];
+                    case 2:
+                        _a = _b.sent();
+                        _b.label = 3;
+                    case 3:
+                        file = _a;
+                        _b.label = 4;
+                    case 4:
+                        _b.trys.push([4, 6, , 7]);
                         return [4 /*yield*/, got_1.default
                                 .post(url, {
-                                body: params.file,
+                                body: file,
                                 headers: {
                                     authorization: "Bearer ".concat(this.apiKey),
                                     "content-type": "application/pdf", // HACK
                                 },
                             })
                                 .json()];
-                    case 2:
-                        response = _a.sent();
-                        return [3 /*break*/, 4];
-                    case 3:
-                        e_3 = _a.sent();
+                    case 5:
+                        response = _b.sent();
+                        return [3 /*break*/, 7];
+                    case 6:
+                        e_3 = _b.sent();
                         throwError(e_3);
-                        return [3 /*break*/, 4];
-                    case 4:
+                        return [3 /*break*/, 7];
+                    case 7:
                         if (!isClassificationResponse(response)) {
                             throw "Got invalid response from extract_from_url: ".concat(JSON.stringify(response));
                         }
@@ -243,10 +262,12 @@ function validateExtractParams(params) {
     if (!params || typeof params != "object")
         throw "Invalid extraction parameters: not an object";
     if (!(("file" in params && params.file instanceof Buffer) ||
-        ("url" in params && typeof params.url === "string")))
-        throw "Invalid extraction parameters: must include file or url";
-    if ("file" in params && "url" in params)
-        throw "Invalid extraction parameters: ony one of file or url should be set";
+        ("url" in params && typeof params.url === "string") ||
+        ("path" in params && typeof params.path === "string")))
+        throw "Invalid extraction parameters: must include file, url or path";
+    if (["file" in params, "url" in params, "path" in params].filter(function (x) { return x; })
+        .length !== 1)
+        throw "Invalid extraction parameters: only one of file, url or path should be set";
     if (!(("documentType" in params && typeof params.documentType === "string") ||
         ("documentTypes" in params &&
             Array.isArray(params.documentTypes) &&
@@ -262,8 +283,8 @@ function validateExtractParams(params) {
 function validateClassificationParams(params) {
     if (!(params &&
         typeof params === "object" &&
-        "file" in params &&
-        params.file instanceof Buffer))
+        (("file" in params && params.file instanceof Buffer) ||
+            ("path" in params && typeof params.path === "string"))))
         throw "Invalid classification params";
 }
 var sleep = (0, util_1.promisify)(setTimeout);
