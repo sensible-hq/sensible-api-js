@@ -1,5 +1,5 @@
 /// <reference types="node" />
-import { ClassificationResult, ExtractionResult, Webhook } from "./types";
+import type { ClassificationResult, ExtractionResult, Webhook } from "./types";
 export declare class SensibleSDK {
     apiKey: string;
     constructor(apiKey: string);
@@ -39,4 +39,4 @@ type ClassificationRequest = {
     id: string;
     downloadLink: string;
 };
-export {};
+export type { ClassificationResult, ExtractionResult, Webhook };
