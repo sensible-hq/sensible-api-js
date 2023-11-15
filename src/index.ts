@@ -1,7 +1,7 @@
 import got, { HTTPError } from "got";
 import * as querystring from "node:querystring";
 import { promisify } from "util";
-import { ClassificationResult, ExtractionResult, Webhook } from "./types";
+import type { ClassificationResult, ExtractionResult, Webhook } from "./types";
 
 const baseUrl = "https://api.sensible.so/v0";
 
@@ -300,3 +300,5 @@ function isClassificationResponse(
     typeof response.download_link === "string"
   );
 }
+
+export type { ClassificationResult, ExtractionResult, Webhook };
