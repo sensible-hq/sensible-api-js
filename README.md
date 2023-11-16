@@ -10,8 +10,8 @@ Welcome! Sensible is a developer-first platform for extracting structured data f
 
 The Sensible Node SDK is a simplification of the [Sensible API](https://docs.sensible.so/reference/choosing-an-endpoint). Use the Sensible Node SDK to:
 
-- [Extract](doc:quickstart-node#extract-document-data): Extract structured data from your custom documents. Configure the extractions for a set of similar documents, or *document type*, in the Sensible app or Sensible API, then you run extractions for documents of the type with this SDK.
-- [Classify](doc:quickstart-node#classify): Classify documents by the types you define, for example, bank statements or tax forms. Use classification to determine which documents to extract prior to calling a Sensible extraction endpoint, or route each document in a system of record.
+- [Extract](#extract-document-data): Extract structured data from your custom documents. Configure the extractions for a set of similar documents, or *document type*, in the Sensible app or Sensible API, then you run extractions for documents of the type with this SDK.
+- [Classify](#classify): Classify documents by the types you define, for example, bank statements or tax forms. Use classification to determine which documents to extract prior to calling a Sensible extraction endpoint, or route each document in a system of record.
 
 ## Install
 
@@ -145,7 +145,7 @@ const results = await sensible.waitFor(request);
 
 To classify an example document, take the following steps:
 
-1. Follow the steps in [Out-of-the-box extractions](doc:library-quickstart) to add support for bank statements to your account.
+1. Follow the steps in [Out-of-the-box extractions](https://docs.sensible.so/reference/choosing-an-endpoint/library-quickstart) to add support for bank statements to your account.
 
 2. Follow the steps in the preceding sections to install and initialize the SDK.
 
@@ -168,26 +168,26 @@ The following excerpt of the results shows the extracted document text in the `T
 
 ```json
 {
-  document_type: {
-    id: '22666f4f-b8d6-4cb5-ad52-d00996989729',
-    name: 'bank_statements',
-    score: 0.8922476745112722
+  "document_type": {
+    "id": "22666f4f-b8d6-4cb5-ad52-d00996989729",
+    "name": "bank_statements",
+    "score": 0.8922476745112722
   },
-  reference_documents: [
+  "reference_documents": [
     {
-      id: 'c82ac28e-7725-4e42-b77c-e74551684caa',
-      name: 'boa_sample',
-      score: 0.9999980536061833
+      "id": "c82ac28e-7725-4e42-b77c-e74551684caa",
+      "name": "boa_sample",
+      "score": 0.9999980536061833
     },
     {
-      id: 'f80424a0-58f8-40e7-814a-eb49b199221e',
-      name: 'wells_fargo_checking_sample',
-      score: 0.8946129923339182
+      "id": "f80424a0-58f8-40e7-814a-eb49b199221e",
+      "name": "wells_fargo_checking_sample",
+      "score": 0.8946129923339182
     },
     {
-      id: 'cf17daf8-7e8b-4b44-bc4b-7cdd6518d963',
-      name: 'chase_consolidated_balance_summary_sample',
-      score: 0.8677569417649393
+      "id": "cf17daf8-7e8b-4b44-bc4b-7cdd6518d963",
+      "name": "chase_consolidated_balance_summary_sample",
+      "score": 0.8677569417649393
     }
   ]
 }
