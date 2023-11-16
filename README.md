@@ -1,17 +1,13 @@
-# sensible-api
-Open-source Sensible SDK for Node/Typescript
+# Sensible Node SDK
 
-Welcome! Sensible is a developer-first platform for extracting structured data from documents, for example, business forms in PDF format. use Sensible to build document-automation features into your vertical SaaS products. Sensible is highly configurable: you can get simple data in minutes by leveraging GPT-4 and other large-language models (LLMs), or you can tackle complex and idiosyncratic document formatting with Sensible's powerful document primitives. 
-
-![Extracting document data](https://raw.githubusercontent.com/sensible-hq/sensible-docs/main/readme-sync/assets/v0/images/final/intro_SDK_2.png)
-
-
-## Overview
-
-The Sensible Node SDK is a simplification of the [Sensible API](https://docs.sensible.so/reference/choosing-an-endpoint). Use the Sensible Node SDK to:
+The open-source Sensible Node SDK offers convenient access to the [Sensible API](https://docs.sensible.so/reference/choosing-an-endpoint). Use the Sensible Node SDK to:
 
 - [Extract](#extract-document-data): Extract structured data from your custom documents. Configure the extractions for a set of similar documents, or *document type*, in the Sensible app or Sensible API, then you run extractions for documents of the type with this SDK.
 - [Classify](#classify): Classify documents by the types you define, for example, bank statements or tax forms. Use classification to determine which documents to extract prior to calling a Sensible extraction endpoint, or route each document in a system of record.
+
+## Documentation
+
+For configuration options, see [Node SDK reference](https://docs.sensible.so/docs/sdk-node).
 
 ## Install
 
@@ -206,9 +202,7 @@ const results = await sensible.waitFor(request);
 console.log(results);
 ```
 
-## Next
 
-For configuration options, see [Node SDK reference](https://docs.sensible.so/docs/sdk-node).
 
 
 
