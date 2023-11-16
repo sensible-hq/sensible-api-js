@@ -1,9 +1,13 @@
-## Sensible Node SDK
+# Sensible Node SDK
 
 The open-source Sensible Node SDK offers convenient access to the [Sensible API](https://docs.sensible.so/reference/choosing-an-endpoint). Use the Sensible Node SDK to:
 
 - [Extract](#extract-document-data): Extract structured data from your custom documents. Configure the extractions for a set of similar documents, or *document type*, in the Sensible app or Sensible API, then you run extractions for documents of the type with this SDK.
 - [Classify](#classify): Classify documents by the types you define, for example, bank statements or tax forms. Use classification to determine which documents to extract prior to calling a Sensible extraction endpoint, or route each document in a system of record.
+
+## Documentation
+
+For configuration options, see [Node SDK reference](https://docs.sensible.so/docs/sdk-node).
 
 ## Install
 
@@ -198,9 +202,7 @@ const results = await sensible.waitFor(request);
 console.log(results);
 ```
 
-## Next
 
-For configuration options, see [Node SDK reference](https://docs.sensible.so/docs/sdk-node).
 
 
 
