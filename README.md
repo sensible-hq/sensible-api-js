@@ -154,22 +154,23 @@ You can classify a document by its similarity to each document type you define i
 See the following code example for classifying a document.
 
 ```node
-const request = await sensible.classify({path: "./boa_sample.pdf"}); 
+import { SensibleSDK } from "sensible-api"
+
+const sensible = new SensibleSDK(YOUR_API_KEY);
+const request = await sensible.classify({path:"./boa_sample.pdf"}); 
 const results = await sensible.waitFor(request);
+console.log(results);
 ```
 
 To classify an example document, take the following steps:
 
-1. Follow the steps in [Out-of-the-box extractions](https://docs.sensible.so/reference/choosing-an-endpoint/library-quickstart) to add support for bank statements to your account.
-
-2. Follow the steps in the preceding sections to install and initialize the SDK.
-
-3. Download the following example file and save it in the same directory as your `index.mjs` file: 
+1. Follow the steps in the preceding sections to install the SDK.
+2. Paste the preceding code into your `index.mjs` file. Ensure you replaced`YOUR_API_KEY` with your [API key]((https://app.sensible.so/account/).
+3. Follow the steps in [Out-of-the-box extractions](https://docs.sensible.so/reference/choosing-an-endpoint/library-quickstart) to add support for bank statements to your account.
+4. Download the following example file and save it in the same directory as your `index.mjs` file: 
 
 | Example document | [Download link](https://github.com/sensible-hq/sensible-configuration-library/raw/main/bank_statements/bank_of_america/boa_sample.pdf) |
 | ---------------- | ------------------------------------------------------------ |
-
-4. Paste the preceding code into your `index.mjs` file. Ensure you replaced`YOUR_API_KEY` with your [API key]((https://app.sensible.so/account/) and `YOUR_DOCUMENT.pdf` with `boa_sample.pdf`. See the following code example to check your code completeness.
 
 5. In a command prompt in the same directory as your `index.mjs` file, run the code with the following command:
 
@@ -179,7 +180,7 @@ node index.mjs
 
 #### Check results
 
-The following excerpt of the results shows the extracted document text:
+The following excerpt of the results shows the document classification:
 
 ```json
 {
@@ -207,21 +208,6 @@ The following excerpt of the results shows the extracted document text:
   ]
 }
 ```
-
-#### Complete code example
-
-Here's a complete example of how to use the SDK for document classification in your own app:
-
-```node
-import { SensibleSDK } from "sensible-api"
-
-const sensible = new SensibleSDK(YOUR_API_KEY);
-const request = await sensible.classify({path:"./boa_sample.pdf"}); 
-const results = await sensible.waitFor(request);
-console.log(results);
-```
-
-
 
 
 
