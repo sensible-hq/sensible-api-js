@@ -186,7 +186,7 @@ node index.mjs
 
 #### Check results
 
-The following excerpt of the results shows the document classification:
+The following excerpt of the results shows that Sensible classifies the example document as a bank statement, and most probably as a Bank of America statement:
 
 ```json
 {
