@@ -119,7 +119,7 @@ Navigate to https://app.sensible.so/editor/instruct/?d=sensible_instruct_basics&
 
 #### Code example: Extract from PDFs in directory and convert to Excel
 
-See the following code for a complete example of how to use the SDK for document extraction in your own app:
+See the following code for a complete example of how to use the SDK for document extraction in your own app.
 
 ```node
 import { promises as fs } from "fs";
