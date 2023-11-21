@@ -41,9 +41,12 @@ const sensible = new SensibleSDK(YOUR_API_KEY);
 
 To extract data from a sample document at a URL:
 
-1. Paste the following code into your `index.mjs` file:
+1. Paste the following code into an empty `index.mjs` file:
 
 ```node
+import { SensibleSDK } from "sensible-api"
+
+const sensible = new SensibleSDK(YOUR_API_KEY);
 const request = await sensible.extract({
       url: "https://github.com/sensible-hq/sensible-docs/raw/main/readme-sync/assets/v0/pdfs/contract.pdf",
       documentType: "sensible_instruct_basics",
@@ -70,10 +73,13 @@ To extract from a local file:
 | Example document | [Download link](https://github.com/sensible-hq/sensible-docs/raw/main/readme-sync/assets/v0/pdfs/contract.pdf) |
 | ---------------- | ------------------------------------------------------------ |
 
-2. Paste the following code into your `index.mjs` file, then run it according to the steps in the previous option:
+2. Paste the following code into an empty `index.mjs` file, then run it according to the steps in the previous option:
 
 
 ```node
+import { SensibleSDK } from "sensible-api"
+
+const sensible = new SensibleSDK(YOUR_API_KEY);
 const request = await sensible.extract({
       path: ("./contract.pdf"),
       documentType: "sensible_instruct_basics",
@@ -111,21 +117,34 @@ Navigate to https://app.sensible.so/editor/instruct/?d=sensible_instruct_basics&
 
 ![Click to enlarge](https://raw.githubusercontent.com/sensible-hq/sensible-docs/main/readme-sync/assets/v0/images/final/sdk_node_1.png)
 
-#### Complete code example
+#### Code example: Extract from PDFs in directory and convert to Excel
 
-See the following code for a complete example of how to use the SDK for document extraction in your own app.
+See the following code for a complete example of how to use the SDK for document extraction in your own app:
 
 ```node
-import { SensibleSDK } from "sensible-api"
-
-const sensible = new SensibleSDK(YOUR_API_KEY);
-const request = await sensible.extract({
-      path: ("./contract.pdf"),
-      documentType: "sensible_instruct_basics",
-      environment: "development" // see Node SDK reference for configuration options
+import { promises as fs } from "fs";
+import { SensibleSDK } from "sensible-sdk";
+import got from "got";
+const apiKey = process.env.SENSIBLE_APIKEY;
+const sensible = new SensibleSDK(apiKey);
+const dir = process.argv[2];
+const files = (await fs.readdir(dir)).filter((file) => file.match(/\.pdf$/));
+const extractions = await Promise.all(
+  files.map(async (filename) => {
+    const file = await fs.readFile(`${dir}/${filename}`);
+    return sensible.extract({
+      file,
+      documentType: "bank_statements",
     });
-const results = await sensible.waitFor(request); // waitFor is optional if you configure  a webhook
-console.log(results); // see Node SDK reference to convert results from JSON to Excel
+  })
+);
+await Promise.all(
+  extractions.map((extraction) => sensible.waitFor(extraction))
+);
+const excel = await sensible.generateExcel(extractions);
+console.log(excel);
+const excelFile = await got(excel.url);
+await fs.writeFile(`${dir}/output.xlsx`, excelFile.rawBody);
 ```
 
 ## Classify
@@ -160,7 +179,7 @@ node index.mjs
 
 #### Check results
 
-The following excerpt of the results shows the extracted document text in the `TO_DO` object:
+The following excerpt of the results shows the extracted document text:
 
 ```json
 {
@@ -201,7 +220,6 @@ const request = await sensible.classify({path:"./boa_sample.pdf"});
 const results = await sensible.waitFor(request);
 console.log(results);
 ```
-
 
 
 
