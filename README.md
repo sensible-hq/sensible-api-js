@@ -171,7 +171,7 @@ console.log(results);
 To classify an example document, take the following steps:
 
 1. Follow the steps in the preceding sections to install the SDK.
-2. Paste the preceding code into your `index.mjs` file. Ensure you replaced`YOUR_API_KEY` with your [API key]((https://app.sensible.so/account/).
+2. Paste the preceding code into your `index.mjs` file. Ensure you replaced`YOUR_API_KEY` with your [API key](https://app.sensible.so/account/).
 3. Follow the steps in [Out-of-the-box extractions](https://docs.sensible.so/reference/choosing-an-endpoint/library-quickstart) to add support for bank statements to your account.
 4. Download the following example file and save it in the same directory as your `index.mjs` file: 
 
