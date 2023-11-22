@@ -11,7 +11,7 @@ For configuration options, see [Node SDK reference](https://docs.sensible.so/doc
 
 ## Install
 
-In an environment in which you've installed Node, create a directory for a test project, open a command prompt in the directory, and install the dependencies:  
+In an environment in which you've installed Node, create a directory for a test project, open a command prompt in the directory, and install the dependencies:
 
 ```shell
 npm install sensible-api
@@ -62,13 +62,13 @@ console.log(results); // see Node SDK reference to convert results from JSON to 
 node index.mjs
 ```
 
-The code extracts data from an example document (`contract.pdf`) using an example document type (`sensible_instruct_basics`) and an example extraction configuration. 
+The code extracts data from an example document (`contract.pdf`) using an example document type (`sensible_instruct_basics`) and an example extraction configuration.
 
 #### Option 2: local file
 
-To extract from a local file: 
+To extract from a local file:
 
-1. Download the following example file and save it in the same directory as your `index.mjs` file: 
+1. Download the following example file and save it in the same directory as your `index.mjs` file:
 
 | Example document | [Download link](https://github.com/sensible-hq/sensible-docs/raw/main/readme-sync/assets/v0/pdfs/contract.pdf) |
 | ---------------- | ------------------------------------------------------------ |
@@ -88,7 +88,7 @@ const results = await sensible.waitFor(request); // waitFor is optional if you c
 console.log(results); // see Node SDK reference to convert results from JSON to Excel
 ```
 
-This code uploads your local file to a Sensible-hosted URL and extracts data from an example document (`contract.pdf`) using an example document type (`sensible_instruct_basics`) and an example extraction configuration. 
+This code extracts data from a local file (`contract.pdf`) using an example document type (`sensible_instruct_basics`) and an example extraction configuration.
 
 #### Check results
 
@@ -111,7 +111,7 @@ The following excerpt of the results shows the extracted document text in the `p
 
 For more information about the response body schema, see [Extract data from a document](https://docs.sensible.so/reference/extract-data-from-a-document) and expand the 200 responses in the middle pane and the right pane to see the model and an example, respectively.
 
-#### Optional: understand extraction
+#### Optional: Understand extraction
 
 Navigate to https://app.sensible.so/editor/instruct/?d=sensible_instruct_basics&c=contract&g=contract to see how the extraction you just ran works in the Sensible app. You can add more fields to the extraction configuration to extract more data:
 
@@ -119,13 +119,13 @@ Navigate to https://app.sensible.so/editor/instruct/?d=sensible_instruct_basics&
 
 #### Code example: Extract from PDFs in directory and convert to Excel
 
-See the following code for a complete example of how to use the SDK for document extraction in your own app. 
+See the following code for a complete example of how to use the SDK for document extraction in your own app.
 
 The example:
 
 1. Filters a directory to find the PDF files.
 2. Extracts data from the PDF files using the extraction configurations in a  `bank_statements` document type.
-3. Compiles the extractions into an Excel file.
+3. Writes the extractions into an Excel file.
 
 ```node
 import { promises as fs } from "fs";
@@ -163,7 +163,7 @@ See the following code example for classifying a document.
 import { SensibleSDK } from "sensible-api"
 
 const sensible = new SensibleSDK(YOUR_API_KEY);
-const request = await sensible.classify({path:"./boa_sample.pdf"}); 
+const request = await sensible.classify({path:"./boa_sample.pdf"});
 const results = await sensible.waitFor(request);
 console.log(results);
 ```
@@ -173,7 +173,7 @@ To classify an example document, take the following steps:
 1. Follow the steps in the preceding sections to install the SDK.
 2. Paste the preceding code into your `index.mjs` file. Ensure you replaced`YOUR_API_KEY` with your [API key](https://app.sensible.so/account/).
 3. Follow the steps in [Out-of-the-box extractions](https://docs.sensible.so/reference/choosing-an-endpoint/library-quickstart) to add support for bank statements to your account.
-4. Download the following example file and save it in the same directory as your `index.mjs` file: 
+4. Download the following example file and save it in the same directory as your `index.mjs` file:
 
 | Example document | [Download link](https://github.com/sensible-hq/sensible-configuration-library/raw/main/bank_statements/bank_of_america/boa_sample.pdf) |
 | ---------------- | ------------------------------------------------------------ |
@@ -214,6 +214,3 @@ The following excerpt of the results shows that Sensible classifies the example 
   ]
 }
 ```
-
-
-
