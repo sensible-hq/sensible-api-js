@@ -9,6 +9,16 @@ The open-source Sensible Node SDK offers convenient access to the [Sensible API]
 
 For configuration options, see [Node SDK reference](https://docs.sensible.so/docs/sdk-node).
 
+## Versions
+
+The latest version of this SDK is v0.
+The latest version of the Sensible API is v0.
+
+## Node and Typescript support
+
+This SDK supports all non end-of-lifed Node versions.
+This SDK supports all non end-of-lifed Typescript versions.
+
 ## Install
 
 In an environment in which you've installed Node, create a directory for a test project, open a command prompt in the directory, and install the dependencies:
