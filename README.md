@@ -1,4 +1,33 @@
 
+# Sensible Node SDK
+
+Welcome! Sensible is a developer-first platform for extracting structured data from documents, for example, business forms in PDF format. use Sensible to build document-automation features into your SaaS products. Sensible is highly configurable: you can get simple data [in minutes](https://docs.sensible.so/docs/getting-started-ai) by leveraging GPT-4 and other large-language models (LLMs), or you can tackle complex and idiosyncratic document formatting with Sensible's powerful [layout-based document primitives](https://docs.sensible.so/docs/getting-started). 
+
+![Click to enlarge](https://raw.githubusercontent.com/sensible-hq/sensible-docs/main/readme-sync/assets/v0/images/final/intro_SDK_2.png)
+
+This open-source Sensible SDK offers convenient access to the [Sensible API](https://docs.sensible.so/reference/choosing-an-endpoint). Use this SDK to:
+
+- [Extract](#extract-document-data): Extract structured data from your custom documents. Configure the extractions for a set of similar documents, or *document type*, in the Sensible app or Sensible API, then run extractions for documents of the type with this SDK.
+- [Classify](#classify): Classify documents by the types you define, for example, bank statements or tax forms. Use classification to determine which documents to extract prior to calling a Sensible extraction endpoint, or route each document in a system of record.
+
+## Documentation
+
+- For extraction and classification response schemas, see [Sensible API](https://docs.sensible.so/reference/choosing-an-endpoint).
+- For configuring document extractions, see [SenseML reference](https://docs.sensible.so/docs/senseml-reference-introduction).
+
+## Versions
+
+- The latest version of this SDK is v0.
+- The latest version of the Sensible API is v0.
+
+## Node and Typescript support
+
+- This SDK supports all non-end-of-life Node versions.
+- This SDK supports all non-end-of-life Typescript versions.
+
+## Install
+
+In an environment in which you've installed Node, create a directory for a test project, open a command prompt in the directory, and install the dependencies:
 
 ```shell
 npm install sensible-api
@@ -205,3 +234,6 @@ See the following table for information about configuration options:
 ### Classification results
 
 Get results from this method by calling the Wait For method. For the schema for the results of a classification request , see [Classify document by type (sync)](https://docs.sensible.so/reference/classify-document-sync) and expand the 200 responses in the middle pane and the right pane to see the model and an example, respectively.
+
+
+
