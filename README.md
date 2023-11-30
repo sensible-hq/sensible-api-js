@@ -1,7 +1,7 @@
 
 # Sensible Node SDK
 
-Welcome! Sensible is a developer-first platform for extracting structured data from documents, for example, business forms in PDF format. use Sensible to build document-automation features into your SaaS products. Sensible is highly configurable: you can get simple data [in minutes](https://docs.sensible.so/docs/getting-started-ai) by leveraging GPT-4 and other large-language models (LLMs), or you can tackle complex and idiosyncratic document formatting with Sensible's powerful [layout-based document primitives](https://docs.sensible.so/docs/getting-started). 
+Welcome! Sensible is a developer-first platform for extracting structured data from documents, for example, business forms in PDF format. use Sensible to build document-automation features into your SaaS products. Sensible is highly configurable: you can get simple data [in minutes](https://docs.sensible.so/docs/getting-started-ai) by leveraging GPT-4 and other large-language models (LLMs), or you can tackle complex and idiosyncratic document formatting with Sensible's powerful [layout-based document primitives](https://docs.sensible.so/docs/getting-started).
 
 ![Click to enlarge](https://raw.githubusercontent.com/sensible-hq/sensible-docs/main/readme-sync/assets/v0/images/final/intro_SDK_2.png)
 
@@ -65,7 +65,7 @@ const sensible = new SensibleSDK(YOUR_API_KEY); //replace with your API key
 const request = await sensible.extract({
       url: "https://github.com/sensible-hq/sensible-docs/raw/main/readme-sync/assets/v0/pdfs/contract.pdf",
       documentType: "sensible_instruct_basics",
-      environment: "development" 
+      environment: "development"
     });
 const results = await sensible.waitFor(request); // polls every 5 seconds. Optional if you configure a webhook
 console.log(results);
@@ -113,9 +113,9 @@ You can use this SDK to extract data from a document, as specified by the extrac
 
 See the following steps for an overview of the SDK's workflow for document data extraction. Every method returns a chainable promise:
 
-1. Instantiate an SDK object with `new SensibleSDK()`. 
+1. Instantiate an SDK object with `new SensibleSDK()`.
 2. Request a document extraction with `sensible.extract()`. Use the following required parameters:
-   1.  **(required)** Specify the document from which to extract data using the `url`, `path`, or `file` parameter. 
+   1.  **(required)** Specify the document from which to extract data using the `url`, `path`, or `file` parameter.
    2.  **(required)** Specify the user-defined document type or types using the `documentType` or `documentTypes` parameter.
 3. Wait for the results. Use `sensible.waitFor()`,  or use a webhook.
 4. Optionally convert extractions to an Excel file with `generateExcel()`.
@@ -236,6 +236,3 @@ See the following table for information about configuration options:
 ### Classification results
 
 Get results from this method by calling the Wait For method. For the schema for the results of a classification request , see [Classify document by type (sync)](https://docs.sensible.so/reference/classify-document-sync) and expand the 200 responses in the middle pane and the right pane to see the model and an example, respectively.
-
-
-
