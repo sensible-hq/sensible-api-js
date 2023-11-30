@@ -142,7 +142,7 @@ See the following table for information about configuration options:
 
 | key               | value                                                      | description                                                  |
 | ----------------- | ---------------------------------------------------------- | ------------------------------------------------------------ |
-| path              | string                                                     | The path to the document you want to extract from. For more information about supported file types, see  [Supported file types](https://docs.sensible.so/docs/file-types). |
+| path              | string                                                     | The path to the document you want to extract from. For more information about supported file types and size, see  [Supported file types](https://docs.sensible.so/docs/file-types). |
 | file              | string                                                     | The non-encoded bytes of the document you want to extract from. |
 | url               | string                                                     | The URL of the document you want to extract from. URL must:<br/>- respond to a GET request with the bytes of the document you want to extract data from <br/>- be either publicly accessible, or presigned with a security token as part of the URL path.<br/>To check if the URL meets these criteria, open the URL with a web browser. The browser must either render the document as a full-page view with no other data, or download the document, without prompting for authentication. |
 | documentType      | string                                                     | Type of document to extract from. Create your custom type in the Sensible app (for example, `rate_confirmation`, `certificate_of_insurance`, or `home_inspection_report`), or use Sensible's library of out-of-the-box supported document types. |
@@ -230,7 +230,7 @@ See the following table for information about configuration options:
 
 | key  | value  | description                                                  |
 | ---- | ------ | ------------------------------------------------------------ |
-| path | string | The path to the document you want to classify. For more information about supported file types, see [Supported file types](https://docs.sensible.so/docs/file-types). |
+| path | string | The path to the document you want to classify. For more information about supported file types and size, see [Supported file types](https://docs.sensible.so/docs/file-types). |
 | file | string | The non-encoded bytes of the document you want to classify.  |
 
 ### Classification results
