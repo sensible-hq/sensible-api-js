@@ -230,7 +230,7 @@ See the following table for information about configuration options:
 
 | key  | value  | description                                                  |
 | ---- | ------ | ------------------------------------------------------------ |
-| path | string | The path to the document you want to classify. For more information about supported file types and size, see [Supported file types](https://docs.sensible.so/docs/file-types). |
+| path | string | The path to the document you want to classify. For information about supported file size and types, see [Supported file types](https://docs.sensible.so/docs/file-types). |
 | file | string | The non-encoded bytes of the document you want to classify.  |
 
 ### Classification results
