@@ -216,7 +216,7 @@ See the following steps for an overview of the SDK's workflow for document class
 You can configure options for document data extraction:
 
 ```node
-import { SensibleSDK } from "sensible-api"
+import { SensibleSDK } from "sensible-api";
 
 const sensible = new SensibleSDK(YOUR_API_KEY);
 const request = await sensible.classify({
@@ -230,8 +230,8 @@ See the following table for information about configuration options:
 
 | key  | value  | description                                                  |
 | ---- | ------ | ------------------------------------------------------------ |
-| path | string | An option for submitting the document you want to extract data from. Pass the path to the document. For more information about supported file types, see [Supported file types](https://docs.sensible.so/docs/file-types). |
-| file | string | Pass the non-encoded document bytes. For information about supported file types, see [Supported file types](https://docs.sensible.so/docs/file-types). |
+| path | string | The path to the document you want to classify. For more information about supported file types, see [Supported file types](https://docs.sensible.so/docs/file-types). |
+| file | string | The non-encoded bytes of the document you want to classify.  |
 
 ### Classification results
 
