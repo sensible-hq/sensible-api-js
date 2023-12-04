@@ -166,6 +166,7 @@ The example:
 
 1. Filters a directory to find the PDF files.
 2. Extracts data from the PDF files using the extraction configurations in a  `bank_statements` document type.
+4. Logs the extracted document data JSON to the console.
 3. Writes the extractions to an Excel file. The Generate Excel method takes an extraction or an array of extractions, and outputs an Excel file. For more information about the conversion process, see [SenseML to spreadsheet reference](https://docs.sensible.so/docs/excel-reference).
 
 ```node
@@ -174,7 +175,7 @@ import { SensibleSDK } from "sensible-api";
 import got from "got";
 const apiKey = process.env.SENSIBLE_APIKEY;
 const sensible = new SensibleSDK(apiKey);
-const dir = process.argv[2];
+const dir = "PATH_TO_DOCUMENTS_DIR";
 const files = (await fs.readdir(dir)).filter((file) => file.match(/\.pdf$/));
 const extractions = await Promise.all(
   files.map(async (filename) => {
@@ -185,10 +186,14 @@ const extractions = await Promise.all(
     });
   })
 );
-await Promise.all(
+const results = await Promise.all(
   extractions.map((extraction) => sensible.waitFor(extraction))
 );
+
+console.log(extractions);
+console.log(results);
 const excel_download = await sensible.generateExcel(extractions);
+console.log("Excel download URL:");
 console.log(excel_download);
 const excelFile = await got(excel_download.url);
 await fs.writeFile(`${dir}/output.xlsx`, excelFile.rawBody);
