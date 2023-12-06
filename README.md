@@ -175,7 +175,7 @@ import { SensibleSDK } from "sensible-api";
 import got from "got";
 const apiKey = process.env.SENSIBLE_APIKEY;
 const sensible = new SensibleSDK(apiKey);
-const dir = "PATH_TO_DOCUMENTS_DIR";
+const dir = "ABSOLUTE_PATH_TO_DOCUMENTS_DIR";
 const files = (await fs.readdir(dir)).filter((file) => file.match(/\.pdf$/));
 const extractions = await Promise.all(
   files.map(async (filename) => {
@@ -192,10 +192,10 @@ const results = await Promise.all(
 
 console.log(extractions);
 console.log(results);
-const excel_download = await sensible.generateExcel(extractions);
+const excel = await sensible.generateExcel(extractions);
 console.log("Excel download URL:");
-console.log(excel_download);
-const excelFile = await got(excel_download.url);
+console.log(excel);
+const excelFile = await got(excel.url);
 await fs.writeFile(`${dir}/output.xlsx`, excelFile.rawBody);
 ```
 
@@ -223,7 +223,7 @@ You can configure options for document data extraction:
 ```node
 import { SensibleSDK } from "sensible-api";
 
-const sensible = new SensibleSDK(YOUR_API_KEY);
+const sensible = new SensibleSDK("YOUR_API_KEY");
 const request = await sensible.classify({
   path:"./boa_sample.pdf"
   });
