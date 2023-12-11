@@ -27,16 +27,19 @@ This open-source Sensible SDK offers convenient access to the [Sensible API](htt
 
 ## Install
 
-In an environment with Node installed, create a directory for a test project, open a command prompt in the directory, and install the dependencies:
+
+In an environment with Node installed, open a command prompt and enter the following commands to create a test project:
+
+```shell
+mkdir sensible-test
+cd sensible-test
+touch index.mjs
+```
+
+Then install the SDK:
 
 ```shell
 npm install sensible-api
-```
-
-To import Sensible to your project,  create an `index.mjs` file in your test project, and add the following lines to the file:
-
-```node
-import { SensibleSDK } from "sensible-api";
 ```
 
 ## Initialize
