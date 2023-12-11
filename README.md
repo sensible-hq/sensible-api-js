@@ -131,7 +131,8 @@ const request = await sensible.extract({
       path: ("./1040_john_doe.pdf"),
       documentType: "tax_forms",
       configurationName: "1040_2021",
-      "environment": "development",
+      environment: "development",
+      documentName="1040_john_doe.pdf",
       webhook: {
          url:"YOUR_WEBHOOK_URL",
          payload: "additional info, for example, a UUID for verification",
