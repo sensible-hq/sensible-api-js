@@ -28,7 +28,7 @@ export class SensibleSDK {
         : "") +
       `?${querystring.stringify({
         ...(environment ? { environment } : {}),
-        ...(documentName ? { documentName } : {}),
+        ...(documentName ? { document_name: documentName } : {}),
       })}`;
 
     const body = {
