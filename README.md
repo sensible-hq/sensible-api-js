@@ -49,7 +49,7 @@ Get an account at [sensible.so](https://app.sensible.so/register) if you don't h
 To initialize the SDK, paste the following code into your `index.mjs` file and replace `YOUR_API_KEY` with your [API key](https://app.sensible.so/account/):
 
 ```node
-const sensible = new SensibleSDK(YOUR_API_KEY);
+const sensible = new SensibleSDK("YOUR_API_KEY");
 ```
 
 **Note:** Ensure you secure your API key in production, for example as a GitHub secret.
@@ -64,7 +64,7 @@ To extract data from a sample document at a URL:
 ```node
 import { SensibleSDK } from "sensible-api";
 
-const sensible = new SensibleSDK(YOUR_API_KEY); //replace with your API key
+const sensible = new SensibleSDK("YOUR_API_KEY"); //replace with your API key
 const request = await sensible.extract({
       url: "https://github.com/sensible-hq/sensible-docs/raw/main/readme-sync/assets/v0/pdfs/contract.pdf",
       documentType: "sensible_instruct_basics",
