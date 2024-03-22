@@ -46,7 +46,7 @@ npm install sensible-api
 
 Get an account at [sensible.so](https://app.sensible.so/register) if you don't have one already.
 
-To initialize the SDK, paste the following code into your `index.mjs` file and replace `YOUR_API_KEY` with your [API key](https://app.sensible.so/account/):
+To initialize the SDK, paste the following code into your `index.mjs` file and replace `*YOUR_API_KEY*` with your [API key](https://app.sensible.so/account/):
 
 ```node
 const sensible = new SensibleSDK(YOUR_API_KEY);
@@ -74,7 +74,7 @@ const results = await sensible.waitFor(request); // polls every 5 seconds. Optio
 console.log(results);
 ```
 
-2. Replace `YOUR_API_KEY` with your [API key](https://app.sensible.so/account/).
+2. replace `*YOUR_API_KEY*` with your [API key](https://app.sensible.so/account/).
 3. In a command prompt in the same directory as your `index.mjs` file, run the code with the following command:
 
 ```shell
