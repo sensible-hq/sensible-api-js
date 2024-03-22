@@ -64,7 +64,8 @@ To extract data from a sample document at a URL:
 ```node
 import { SensibleSDK } from "sensible-api";
 
-const sensible = new SensibleSDK(YOUR_API_KEY); //replace with your API key
+// if you paste in your key, like `SensibleSDK("1ac34b14")` then secure it in production
+const sensible = new SensibleSDK(YOUR_API_KEY); 
 const request = await sensible.extract({
       url: "https://github.com/sensible-hq/sensible-docs/raw/main/readme-sync/assets/v0/pdfs/contract.pdf",
       documentType: "sensible_instruct_basics",
