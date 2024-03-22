@@ -72,7 +72,7 @@ var SensibleSDK = /** @class */ (function () {
                                 ? "/".concat(params.documentType) +
                                     ("configuration" in params ? "/".concat(params.configurationName) : "")
                                 : "") +
-                            "?".concat(querystring.stringify(__assign(__assign({}, (environment ? { environment: environment } : {})), (documentName ? { documentName: documentName } : {}))));
+                            "?".concat(querystring.stringify(__assign(__assign({}, (environment ? { environment: environment } : {})), (documentName ? { document_name: documentName } : {}))));
                         body = __assign(__assign(__assign({}, ("url" in params ? { document_url: params.url } : {})), (webhook ? { webhook: webhook } : {})), ("documentTypes" in params ? { types: params.documentTypes } : {}));
                         headers = { authorization: "Bearer ".concat(this.apiKey) };
                         _b.label = 1;
