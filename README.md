@@ -179,7 +179,7 @@ import { SensibleSDK } from "sensible-api";
 import got from "got";
 const apiKey = process.env.SENSIBLE_API_KEY;
 const sensible = new SensibleSDK(apiKey);
-const dir = "ABSOLUTE_PATH_TO_DOCUMENTS_DIR";
+const dir = ABSOLUTE_PATH_TO_DOCUMENTS_DIR;
 const files = (await fs.readdir(dir)).filter((file) => file.match(/\.pdf$/));
 const extractions = await Promise.all(
   files.map(async (filename) => {
