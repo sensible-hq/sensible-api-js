@@ -177,7 +177,7 @@ The example:
 import { promises as fs } from "fs";
 import { SensibleSDK } from "sensible-api";
 import got from "got";
-const apiKey = process.env.SENSIBLE_APIKEY;
+const apiKey = process.env.SENSIBLE_API_KEY;
 const sensible = new SensibleSDK(apiKey);
 const dir = "ABSOLUTE_PATH_TO_DOCUMENTS_DIR";
 const files = (await fs.readdir(dir)).filter((file) => file.match(/\.pdf$/));
