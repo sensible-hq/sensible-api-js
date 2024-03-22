@@ -227,7 +227,7 @@ You can configure options for document data extraction:
 ```node
 import { SensibleSDK } from "sensible-api";
 
-const sensible = new SensibleSDK("YOUR_API_KEY");
+const sensible = new SensibleSDK(YOUR_API_KEY);
 const request = await sensible.classify({
   path:"./boa_sample.pdf"
   });
