@@ -229,6 +229,7 @@ You can configure options for document data extraction:
 ```node
 import { SensibleSDK } from "sensible-api";
 
+// if you paste in your key, like `SensibleSDK("1ac34b14")` then secure it in production
 const sensible = new SensibleSDK(YOUR_API_KEY);
 const request = await sensible.classify({
   path:"./boa_sample.pdf"
