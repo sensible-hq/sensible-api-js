@@ -1,6 +1,6 @@
 {
   "name": "sensible-api",
-  "version": "0.0.8",
+  "version": "0.0.10",
   "description": "Javascript SDK for Sensible, the developer-first platform for extracting structured data from documents so that you can build document-automation features into your SaaS products",
   "keywords": ["IDP","parsing","conversion","openai","processing","csv","excel","convert","json","LLMs","pdf","png","tiff","jpeg","doc","docx","document","text","data","extraction","extract","classification","classify","sensible","openapi","gpt-3","gpt-4","senseml","automation","sdk","query","document-processing"," intelligent-document-processing"," pdf-conversion"," pdf-extraction"," document-extraction"," pdf-crawler","pdf-parser","pdf-extract","pdf-to-data","document-data-extraction","document-automation","sensible-api"],
   "license": "MIT",

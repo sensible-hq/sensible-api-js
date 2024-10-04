@@ -129,7 +129,7 @@ export class SensibleSDK {
           response &&
           typeof response === "object" &&
           "status" in response &&
-          response.status !== "WAITING"
+          (response.status == "COMPLETE" || response.status == "FAILED")
         ) {
           return response as ExtractionResult;
         }
