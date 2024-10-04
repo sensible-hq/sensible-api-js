@@ -8,7 +8,7 @@ Welcome! Sensible is a developer-first platform for extracting structured data f
 This open-source Sensible SDK offers convenient access to the [Sensible API](https://docs.sensible.so/reference/choosing-an-endpoint). Use this SDK to:
 
 - [Extract](#usage-extract-document-data): Extract structured data from your custom documents. Configure the extractions for a set of similar documents, or *document type*, in the Sensible app or Sensible API, then run extractions for documents of the type with this SDK.
-- [Classify](#usage-classify-documents-by-type): Classify documents by the types you define, for example, bank statements or tax forms. Use classification to determine which documents to extract prior to calling a Sensible extraction endpoint, or route each document in a system of record.
+- [Classify](#usage-classify-documents-by-type): Classify documents by the types you define, for example, bank statements or tax documents. Use classification to determine which documents to extract prior to calling a Sensible extraction endpoint, or route each document in a system of record.
 
 ## Documentation
 
@@ -134,7 +134,7 @@ See the following steps for an overview of the SDK's workflow for document data 
 ```node
 const request = await sensible.extract({
       path: ("./1040_john_doe.pdf"),
-      documentType: "tax_forms",
+      documentType: "1040s",
       configurationName: "1040_2021",
       environment: "development",
       documentName="1040_john_doe.pdf",

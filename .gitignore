@@ -1,1 +1,11 @@
-node_modules
+.envrc
+logs.csv
+test.sh
+test.yml
+docs.json
+spec.json
+*.sublime-project
+*.sublime-workspace
+readme-sync/f_project.sublime-workspace
+*.sublime-workspace
+readme-sync/f_project.sublime-workspace
