@@ -1,11 +1,24 @@
-/// <reference types="node" />
 import type { ClassificationResult, ExtractionResult, Webhook } from "./types";
+export interface SensibleSDKOptions {
+    debug?: true;
+    pollingInterval?: number;
+    region?: "us-west-2" | "eu-west-2" | "ca-central-1";
+}
 export declare class SensibleSDK {
-    apiKey: string;
-    constructor(apiKey: string);
+    private readonly options;
+    static DEFAULT_WAIT_TIME: number;
+    static MAX_WAIT_TIME: number;
+    static DEFAULT_POLLING_INTERVAL: number;
+    static MAX_POLLING_INTERVAL: number;
+    private requestCount;
+    private readonly backend;
+    private readonly s3;
+    constructor(apiKey: string, options?: SensibleSDKOptions);
     extract(params: ExtractParams): Promise<ExtractionRequest>;
     classify(params: ClassificationParams): Promise<ClassificationRequest>;
-    waitFor(request: ClassificationRequest | ExtractionRequest): Promise<ExtractionResult | ClassificationResult>;
+    private extractionWaitLoop;
+    private classificationWaitLoop;
+    waitFor(request: ClassificationRequest | ExtractionRequest, timeout?: number): Promise<ClassificationResult | ExtractionResult>;
     generateExcel(requests: ExtractionRequest | ExtractionRequest[]): Promise<{
         url: string;
     }>;
