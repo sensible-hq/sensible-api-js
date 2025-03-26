@@ -1,16 +1,67 @@
-import got, { HTTPError } from "got";
+import got, { Got, Hooks, HTTPError, Response } from "got";
 import * as querystring from "node:querystring";
 import { promises as fs } from "fs";
 import { promisify } from "util";
 import type { ClassificationResult, ExtractionResult, Webhook } from "./types";
 
-const baseUrl = "https://api.sensible.so/v0";
+
+export interface SensibleSDKOptions {
+  debug?: true;
+  pollingInterval?: number;
+  region?: "us-west-2" | "eu-west-2" | "ca-central-1";
+}
 
 export class SensibleSDK {
-  apiKey: string;
+  public static DEFAULT_WAIT_TIME = 60_000 * 5; // five minutes
+  public static MAX_WAIT_TIME = 60_000 * 15; // fifteen minutes
+  public static DEFAULT_POLLING_INTERVAL = 5_000; // five seconds
+  public static MAX_POLLING_INTERVAL = 60_000; // one minute
 
-  constructor(apiKey: string) {
-    this.apiKey = apiKey;
+
+  private requestCount = 1;
+  private readonly backend: Got;
+  private readonly s3: Got;
+
+  constructor(apiKey: string, private readonly options: SensibleSDKOptions = {}) {
+    const region = options.region ?? "us-west-2";
+    const subdomain = region === "us-west-2" ? "api" : `api-${region}`;
+    const prefixUrl = `https://${subdomain}.sensible.so/v0`;
+    const hooks: Hooks = {
+      beforeRequest: [
+        (options) => {
+          const requestId = this.requestCount++;
+          if (this.options.debug) {
+            options.context.requestId = requestId;
+            console.info(`Request ${requestId}: ${options.method} ${options.url}`);
+          }
+        }
+      ],
+      afterResponse: [
+        (response) => {
+          if (this.options.debug) {
+            const amzRequestid = response.headers["x-amzn-requestid"];
+            const requestId = response.request.options.context.requestId;
+            console.info(`Response ${requestId}: ${response.statusCode}${amzRequestid ? ` (amz request id: ${amzRequestid})` : ""}`);
+          }
+          return response;
+        }
+      ],
+    };
+    this.backend = got.extend({
+      prefixUrl,
+      headers: {
+        authorization: `Bearer ${apiKey}`,
+      },
+      throwHttpErrors: false,
+      hooks,
+    });
+    this.s3 = got.extend({
+      headers: {
+        "content-type": undefined,
+      },
+      throwHttpErrors: false,
+      hooks,
+    });
   }
 
   async extract(params: ExtractParams): Promise<ExtractionRequest> {
@@ -20,8 +71,7 @@ export class SensibleSDK {
     const { webhook, documentName, environment } = params;
 
     const url =
-      baseUrl +
-      ("url" in params ? "/extract_from_url" : "/generate_upload_url") +
+      ("url" in params ? "extract_from_url" : "generate_upload_url") +
       ("documentType" in params
         ? `/${params.documentType}` +
           ("configuration" in params ? `/${params.configurationName}` : "")
@@ -31,23 +81,19 @@ export class SensibleSDK {
         ...(documentName ? { document_name: documentName } : {}),
       })}`;
 
-    const body = {
+    const json = {
       ...("url" in params ? { document_url: params.url } : {}),
       ...(webhook ? { webhook } : {}),
       ...("documentTypes" in params ? { types: params.documentTypes } : {}),
     };
-    const headers = { authorization: `Bearer ${this.apiKey}` };
 
-    let response;
-    try {
-      response = await got
-        .post(url, {
-          json: body,
-          headers,
-        })
-        .json();
-    } catch (e: unknown) {
-      throwError(e);
+    const response =  await this.backend
+      .post<ExtractionResponse>(url, {
+        json,
+      });
+
+    if (response.statusCode !== 200) {
+      throw responseError(response);
     }
 
     if ("url" in params) {
@@ -69,13 +115,14 @@ export class SensibleSDK {
       const file =
         "file" in params ? params.file : await fs.readFile(params.path);
 
-      try {
-        const putResponse = await got.put(upload_url, {
-          method: "PUT",
-          body: file,
-        });
-      } catch (e: any) {
-        throw `Error ${e.response.statusCode} uploading file to S3: ${e.response.body}`;
+      
+      const putResponse = await this.s3.put(upload_url, {
+        method: "PUT",
+        body: file,
+      });
+
+      if (putResponse.statusCode !== 200) {
+        throw responseError(putResponse);
       }
 
       return { type: "extraction", id };
@@ -85,25 +132,24 @@ export class SensibleSDK {
   async classify(params: ClassificationParams): Promise<ClassificationRequest> {
     validateClassificationParams(params);
 
-    const url = `${baseUrl}/classify/async`;
+    const url = `classify/async`;
 
     const file =
       "file" in params ? params.file : await fs.readFile(params.path);
+    const contentType = "application/pdf";
 
-    let response;
-    try {
-      response = await got
-        .post(url, {
-          body: file,
-          headers: {
-            authorization: `Bearer ${this.apiKey}`,
-            "content-type": "application/pdf", // HACK
-          },
-        })
-        .json();
-    } catch (e: unknown) {
-      throwError(e);
+    const response =  await this.backend
+      .post<ClassificationResponse>(url, {
+        body: file,
+        headers: {
+          "content-type": contentType,
+        },
+      });
+    
+    if (response.statusCode !== 200) {
+      throw responseError(response);
     }
+    
     if (!isClassificationResponse(response)) {
       throw `Got invalid response from extract_from_url: ${JSON.stringify(
         response
@@ -116,36 +162,53 @@ export class SensibleSDK {
     };
   }
 
-  async waitFor(request: ClassificationRequest | ExtractionRequest) {
-    // TODO: timeout?
-    while (true) {
-      if (request.type === "extraction") {
-        const response = await got
-          .get(`${baseUrl}/documents/${request.id}`, {
-            headers: { authorization: `Bearer ${this.apiKey}` },
-          })
-          .json();
-        if (
-          response &&
-          typeof response === "object" &&
-          "status" in response &&
-          (response.status == "COMPLETE" || response.status == "FAILED")
-        ) {
-          return response as ExtractionResult;
-        }
-      } else {
-        let response;
-        try {
-          response = await got.get(request.downloadLink).json();
-          return response as ClassificationResult;
-        } catch (e: unknown) {
-          // 404 is expected while classifying is being done
-          if (!(e instanceof HTTPError && e.response.statusCode === 404))
-            throwError(e);
-        }
+  private async extractionWaitLoop(id: string, interval: number): Promise<ExtractionResult> {
+    do {
+      const response =
+        await this.backend.get<ExtractionResult>(`documents/${id}`);
+      if (response.statusCode !== 200) {
+        throw responseError(response);
       }
-      await sleep(5_000); // TODO: parameterize polling interval
-    }
+      const result = response.body;
+      if (result.status == "COMPLETE" || result.status == "FAILED") {
+        return result;
+      }
+      await sleep(interval);
+    } while (true);
+  }
+
+  private async classificationWaitLoop(downloadUrl: string, interval: number): Promise<ClassificationResult> {
+    do {
+      const response =
+        await this.s3.get<ClassificationResult>(downloadUrl);
+      if (response.statusCode === 404) {
+        await sleep(interval);
+        continue;
+      }
+      if (response.statusCode !== 200) {
+        throw responseError(response);
+      }
+      return response.body;
+    } while (true);
+  }
+
+  async waitFor(
+    request: ClassificationRequest | ExtractionRequest,
+    timeout = SensibleSDK.DEFAULT_WAIT_TIME
+  ): Promise<ClassificationResult | ExtractionResult> {
+    timeout = Math.min(timeout, SensibleSDK.MAX_WAIT_TIME);
+    const interval = Math.min(
+      this.options.pollingInterval ?? SensibleSDK.DEFAULT_POLLING_INTERVAL,
+      SensibleSDK.MAX_POLLING_INTERVAL
+    );
+    const loopPromise = request.type === "extraction"
+      ? this.extractionWaitLoop(request.id, interval)
+      : this.classificationWaitLoop(request.downloadLink, interval);
+
+    return await Promise.race([
+        loopPromise,
+        sleep(timeout).then(() => { throw `Timed out waiting for ${timeout}ms` })
+      ]);
   }
 
   // requested extractions must be completed
@@ -155,21 +218,13 @@ export class SensibleSDK {
     const extractions = Array.isArray(requests) ? requests : [requests];
 
     const url =
-      baseUrl +
-      "/generate_excel/" +
+      "generate_excel/" +
       extractions.map((extraction) => extraction.id).join(",");
-
-    try {
-      return await got
-        .get(url, {
-          headers: { authorization: `Bearer ${this.apiKey}` },
-        })
-        .json();
-    } catch (e) {
-      throwError(e);
-      // HACK: keep TS happy
-      throw null;
+    const response = await this.backend.get<{ url: string; }>(url);
+    if (response.statusCode !== 200) {
+      throw responseError(response);
     }
+    return response.body;
   }
 }
 
@@ -280,20 +335,24 @@ function throwError(e: unknown) {
     throw `Unknown error ${e}`;
   }
 
-  switch (e.response.statusCode) {
+  throw responseError(e.response);
+}
+
+function responseError(response: Response<unknown>): string {
+  switch (response.statusCode) {
     case 400:
-      throw `Bad Request (400): ${e.response.body}`;
+      return `Bad Request (400): ${response.body}`;
     case 401:
-      throw "Unauthorized (401), please check your API key";
+      return "Unauthorized (401), please check your API key";
     case 415:
-      throw "Unsupported Media Type (415), please check your document format";
+      return "Unsupported Media Type (415), please check your document format";
     case 429:
       // automatic retry?
-      throw "Too Many Requests (429)";
+      return "Too Many Requests (429)";
     case 500:
-      throw `Internal Server Error (500): ${e.response.body}`;
+      return `Internal Server Error (500): ${response.body}`;
     default:
-      throw `Got unknown HTTP status code ${e.response.statusCode}: ${e.response.body}`;
+      return `Unexpected HTTP status code ${response.statusCode}: ${response.body}`;
   }
 }
 
