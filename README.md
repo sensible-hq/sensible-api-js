@@ -69,7 +69,7 @@ import { SensibleSDK } from "sensible-api";
 const sensible = new SensibleSDK(YOUR_API_KEY); 
 const request = await sensible.extract({
       url: "https://github.com/sensible-hq/sensible-docs/raw/main/readme-sync/assets/v0/pdfs/contract.pdf",
-      documentType: "sensible_instruct_basics",
+      documentType: "llm_basics",
       environment: "development"
     });
 const results = await sensible.waitFor(request); // polls every 5 seconds. Optional if you configure a webhook
@@ -83,7 +83,7 @@ console.log(results);
 node index.mjs
 ```
 
-The code extracts data from an example document (`contract.pdf`) using an example document type (`sensible_instruct_basics`) and an example extraction configuration.
+The code extracts data from an example document (`contract.pdf`) using an example document type (`llm_basics`) and an example extraction configuration.
 
 #### Results
 
@@ -106,7 +106,7 @@ You should see the following extracted document text in the `parsed_document` ob
 
 #### Optional: Understand extraction
 
-Navigate to the example in the [SenseML editor](https://app.sensible.so/editor/?d=sensible_instruct_basics&c=contract&g=contract) to see how the extraction you just ran works in the Sensible app. You can add more fields to the left pane to extract more data:
+Navigate to the example in the [SenseML editor](https://app.sensible.so/editor/?d=llm_basics&c=contract&g=contract) to see how the extraction you just ran works in the Sensible app. You can add more fields to the left pane to extract more data:
 
 ![Click to enlarge](https://raw.githubusercontent.com/sensible-hq/sensible-docs/main/readme-sync/assets/v0/images/final/sdk_node_1.png)
 
