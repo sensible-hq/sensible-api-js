@@ -24,7 +24,7 @@ export class SensibleSDK {
       ("url" in params ? "/extract_from_url" : "/generate_upload_url") +
       ("documentType" in params
         ? `/${params.documentType}` +
-          ("configuration" in params ? `/${params.configurationName}` : "")
+          ("configurationName" in params ? `/${params.configurationName}` : "")
         : "") +
       `?${querystring.stringify({
         ...(environment ? { environment } : {}),
