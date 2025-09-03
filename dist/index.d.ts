@@ -1,4 +1,3 @@
-/// <reference types="node" />
 import type { ClassificationResult, ExtractionResult, Webhook } from "./types";
 export declare class SensibleSDK {
     apiKey: string;
