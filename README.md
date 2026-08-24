@@ -5,6 +5,8 @@ Welcome! Sensible is a developer-first platform for extracting structured data f
 
 ![Click to enlarge](https://raw.githubusercontent.com/sensible-hq/sensible-docs/v0/assets/images/final/intro_SDK_2.png)
 
+## SDK introduction
+
 This open-source Sensible SDK offers convenient access to the [Sensible API](https://docs.sensible.so/reference/choosing-an-endpoint). Use this SDK to:
 
 - [Extract](#usage-extract-document-data): Extract structured data from your custom documents. Configure the extractions for a set of similar documents, or *document type*, in the Sensible app or Sensible API, then run extractions for documents of the type with this SDK.
