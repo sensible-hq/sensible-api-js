@@ -5,7 +5,7 @@ Welcome! Sensible is a developer-first platform for extracting structured data f
 
 ![Click to enlarge](https://raw.githubusercontent.com/sensible-hq/sensible-docs/v0/assets/images/final/intro_SDK_2.png)
 
-<!--SENSIBLE-DOCS-SYNC-START -->
+ <!-- SENSIBLE-DOCS-SYNC-START -->
 
 ## SDK overview
 
